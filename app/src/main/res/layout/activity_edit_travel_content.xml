@@ -13,7 +13,6 @@
         android:layout_margin="16dp"
         android:hint="@string/enter_travel_tittle"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:errorEnabled="true"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
@@ -23,7 +22,7 @@
             android:singleLine="true"
             android:imeOptions="actionDone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -99,7 +98,6 @@
         android:text="@string/add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

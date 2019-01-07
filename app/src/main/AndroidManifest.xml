@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.admin.travel">
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".base.MyApplication"
         android:allowBackup="true"
@@ -13,17 +15,18 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBTV7Bkb3A0-Pctf4a3JVBVeK9AHT9FCeE"/>
+            android:value="AIzaSyBAlakKYdoMKSCsKYrpvrZzkrMRxvW6ZWc" />
+
         <activity
             android:name=".mainScreen.MainActivity"
             android:label="@string/app_name">
 
-             <!--<intent-filter>-->
-             <!--<action android:name="android.intent.action.MAIN" />-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
 
-             <!--<category android:name="android.intent.category.LAUNCHER" />-->
-             <!--</intent-filter>-->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".Launcher"
@@ -37,12 +40,29 @@
         </activity>
         <activity
             android:name=".editTravel.EditTravelActivity"
-            android:label="@string/title_activity_edit_travel"
+            android:label="@string/title_activity_new_travel"
             android:parentActivityName=".mainScreen.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.admin.travel.mainScreen.MainActivity" />
         </activity>
+        <activity
+            android:name=".travelDetail.TravelDetailActivity"
+            android:label="@string/travel_detail"
+            android:launchMode="singleTop"
+            android:parentActivityName=".mainScreen.MainActivity" />
+        <activity
+            android:name=".travelDetail.plan.PlanDetailActivity"
+            android:label="@string/title_activity_plan_detail"
+            android:parentActivityName=".travelDetail.TravelDetailActivity" />
+        <activity
+            android:name=".travelDetail.dairy.DiaryDetailActivity"
+            android:label="@string/title_activity_diary_detail"
+            android:parentActivityName=".travelDetail.TravelDetailActivity" />
+        <activity
+            android:name=".travelDetail.expenses.ExpensesDetailActivity"
+            android:label="@string/title_activity_expenses_detail"
+            android:parentActivityName=".travelDetail.TravelDetailActivity" />
     </application>
 
 </manifest>

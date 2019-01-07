@@ -3,11 +3,12 @@
     android:opacity="opaque">
     <item android:drawable="@android:color/white" />
     <!--<item-->
-        <!--android:drawable="@mipmap/icon"-->
-        <!--android:gravity="center">-->
+    <!--android:drawable="@mipmap/icon"-->
+    <!--android:gravity="center">-->
     <!--</item>-->
     <item>
-        <bitmap android:src="@mipmap/travel"
-            android:gravity="center"/>
+        <bitmap
+            android:src="@mipmap/travel"
+            android:gravity="center" />
     </item>
 </layer-list>

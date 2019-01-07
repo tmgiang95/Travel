@@ -1,9 +1,12 @@
 package com.example.admin.travel.editTravel;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -11,8 +14,8 @@ import android.widget.EditText;
 import com.example.admin.travel.R;
 import com.example.admin.travel.base.BaseActivity;
 import com.example.admin.travel.models.Travel;
-import com.example.admin.travel.editTravel.utils.MyDate;
-import com.example.admin.travel.editTravel.utils.MyString;
+import com.example.admin.travel.utils.MyDate;
+import com.example.admin.travel.utils.MyString;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -27,6 +30,11 @@ import java.util.Calendar;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
+import static com.example.admin.travel.base.MyConst.REQACTION_DEL_TRAVEL;
+import static com.example.admin.travel.base.MyConst.REQACTION_EDIT_TRAVEL;
+import static com.example.admin.travel.base.MyConst.REQCD_PLACE_AUTOCOMPLETE;
+import static com.example.admin.travel.base.MyConst.REQKEY_TRAVEL;
+
 public class EditTravelActivity extends BaseActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     private EditText etText;
@@ -37,6 +45,7 @@ public class EditTravelActivity extends BaseActivity implements View.OnClickList
     private Travel mTravel;
     private long startDt;
     private long endDt;
+    private boolean mInEditMode;
 
 
     @Override
@@ -47,6 +56,13 @@ public class EditTravelActivity extends BaseActivity implements View.OnClickList
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (REQACTION_EDIT_TRAVEL.equals(getIntent().getAction())) {
+            mInEditMode = true;
+            setTitle(getString(R.string.title_activity_edit_travel));
+            mTravel = (Travel) getIntent().getExtras().getSerializable(REQKEY_TRAVEL);
+            fillData();
+        }
 
 
     }
@@ -133,6 +149,7 @@ public class EditTravelActivity extends BaseActivity implements View.OnClickList
     public void validData(View v) {
         String title = etText.getText().toString();
         if (MyString.isEmpty(title)) {
+            ((TextInputLayout) findViewById(R.id.titleLayout)).setErrorEnabled(true);
             ((TextInputLayout) findViewById(R.id.titleLayout)).setError("Travel title is Empty");
             return;
         } else {
@@ -146,8 +163,12 @@ public class EditTravelActivity extends BaseActivity implements View.OnClickList
             Snackbar.make(v, "Travel end date is Empty", Snackbar.LENGTH_LONG).show();
             return;
         }
-        mTravel = new Travel(title);
-        mTravel.setStartDt(startDt);
+        if (mTravel == null) {
+            mTravel = new Travel(title);
+        } else {
+            mTravel.setTitle(title);
+        }
+        mTravel.setDateTime(startDt);
         mTravel.setEndDt(endDt);
         if (mPlace != null) {
             mTravel.setPlaceId(mPlace.getId());
@@ -165,6 +186,15 @@ public class EditTravelActivity extends BaseActivity implements View.OnClickList
         finish();
     }
 
+    private void fillData() {
+        etText.setText(mTravel.getTitle());
+        etPlace.setText(mTravel.getPlaceName());
+        etStartDt.setText(mTravel.getDateTimeText());
+        etEndDt.setText(MyDate.getDateString(mTravel.getEndDt()));
+        startDt = mTravel.getDateTimeLong();
+        endDt = mTravel.getEndDtLong();
+    }
+
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Object tag = view.getTag();
@@ -180,5 +210,36 @@ public class EditTravelActivity extends BaseActivity implements View.OnClickList
             endDt = calendar.getTimeInMillis();
             etEndDt.setText(String.valueOf(MyDate.getDateString(endDt)));
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (mInEditMode)
+            getMenuInflater().inflate(R.menu.menu_edittravel, menu);
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.mniDelete:
+                createAlertDialog(R.string.title_delete_dialog
+                        , R.string.message_delete_dialog
+                        , new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent returnIntent = new Intent();
+                                returnIntent.setAction(REQACTION_DEL_TRAVEL);
+                                returnIntent.putExtra(REQKEY_TRAVEL, mTravel);
+                                setResult(RESULT_OK, returnIntent);
+                                finish();
+                            }
+                        }
+                        , null);
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
